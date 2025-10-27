@@ -7,7 +7,7 @@ import nltk
 nltk.download('punkt')
 
 class BM25Search:
-    def __init__(self, preprocessed_path="preprocessed_cranfield.json", checkpoint_path="bm25_checkpoint.pkl"):
+    def __init__(self, preprocessed_path="preprocessed_cranfield.json", checkpoint_path="checkpoints/bm25_checkpoint.pkl"):
         self.preprocessed_path = preprocessed_path
         self.checkpoint_path = checkpoint_path
         

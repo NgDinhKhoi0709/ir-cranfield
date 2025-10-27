@@ -285,7 +285,7 @@ if __name__ == "__main__":
     evaluator.print_detailed_results(results, show_top_n=3)
     
     # Save results to file
-    output_file = "evaluation_results.json"
+    output_file = "results/evaluation_results.json"
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
     
