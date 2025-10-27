@@ -3,13 +3,23 @@ import pickle
 import os
 from rank_bm25 import BM25Okapi
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 import nltk
+from preprocess import preprocess, normalize
 nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger_eng')
 
 class BM25Search:
     def __init__(self, preprocessed_path="preprocessed_cranfield.json", checkpoint_path="checkpoints/bm25_checkpoint.pkl"):
         self.preprocessed_path = preprocessed_path
         self.checkpoint_path = checkpoint_path
+        
+        # Initialize preprocessing components
+        self.stop_words = set(stopwords.words('english'))
+        self.lemmatizer = WordNetLemmatizer()
         
         # Try to load from checkpoint first
         if os.path.exists(checkpoint_path):
@@ -55,8 +65,12 @@ class BM25Search:
         self.docs = checkpoint_data['docs']
         print(f"✅ BM25 model loaded from checkpoint with {len(self.corpus)} documents")
     
+    def preprocess_query(self, query):
+        """Preprocess query using the same pipeline as documents"""
+        return preprocess(query, self.stop_words, self.lemmatizer)
+    
     def search(self, query, top_k=10):
-        query_tokens = word_tokenize(query.lower())
+        query_tokens = self.preprocess_query(query)
         scores = self.bm25.get_scores(query_tokens)
         ranked = sorted(list(zip(self.doc_ids, scores)), key=lambda x: x[1], reverse=True)
         return ranked[:top_k]

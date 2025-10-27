@@ -79,7 +79,7 @@ def preprocess(text, stop_words, lemmatizer):
     return tokens
 
 # Sinh bigram toàn corpus
-def build_global_bigrams(all_tokens, min_freq=5, top_n=200):
+def build_global_bigrams(all_tokens, min_freq=5, top_n=500):
     bigram_measures = BigramAssocMeasures()
     finder = BigramCollocationFinder.from_words(all_tokens)
     finder.apply_freq_filter(min_freq)
@@ -95,8 +95,7 @@ def preprocess_corpus(docs):
     
     all_tokens = []
     for d in docs:
-        text = normalize(d["text"])
-        tokens = preprocess(text, stop_words, lemmatizer)
+        tokens = preprocess(d["text"], stop_words, lemmatizer)
         all_tokens.extend(tokens)
     
     # Xây bigram toàn corpus
@@ -104,8 +103,7 @@ def preprocess_corpus(docs):
 
     processed_docs = []
     for d in tqdm(docs, desc="Processing Cranfield docs"):
-        text = normalize(d["text"])
-        tokens = preprocess(text, stop_words, lemmatizer)
+        tokens = preprocess(d["text"], stop_words, lemmatizer)
         # Sinh bigram trong tài liệu nếu khớp với global bigram
         doc_bigrams = []
         for i in range(len(tokens) - 1):
