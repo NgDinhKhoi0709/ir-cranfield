@@ -1,0 +1,7 @@
+tqdm
+nltk
+spacy
+ir_datasets
+rank_bm25
+
+# python -m spacy download en_core_web_lg
